@@ -41,7 +41,7 @@ ${analysis.theme}
 ## Spacing & Layout
 
 - **Base unit:** ${spacing.baseUnit}
-- **Scale:** ${spacing.values.join(", ")}px
+- **Scale:** ${spacing.values.map(v => `${v}px`).join(", ")}
 - **Max width:** ${layout.maxWidth}
 - **Grid:** ${layout.columns} columns
 - **Structure:** ${layout.description}

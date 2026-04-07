@@ -1,7 +1,6 @@
 import { program } from "commander";
 import ora from "ora";
-import { unlink } from "node:fs/promises";
-import { writeFile } from "node:fs/promises";
+import { unlink, writeFile } from "node:fs/promises";
 import { takeScreenshot } from "./screenshot.js";
 import { analyzeScreenshot } from "./analyze.js";
 import { generateWithStitch } from "./stitch.js";
