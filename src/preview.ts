@@ -23,8 +23,14 @@ export function buildPreviewHtml(
     return (r * 299 + g * 587 + b * 114) / 1000 <= 128;
   };
 
-  const onColor = (hex: string) =>
-    lightText(hex) ? "#ffffff" : colors.textPrimary;
+  // Returns readable text color for a given background
+  const onColor = (hex: string) => lightText(hex) ? "#ffffff" : "#1a1a1a";
+  // Readable muted text color for a given background
+  const onColorMuted = (hex: string) => lightText(hex) ? "#aaaaaa" : "#666666";
+
+  // Pre-compute surface text colors
+  const surfaceText = onColor(colors.surface);
+  const surfaceTextMuted = onColorMuted(colors.surface);
 
   // Extract base font for Google Fonts
   const baseFontName = typography.fontFamily.split(",")[0].trim().replace(/['"]/g, "");
@@ -76,9 +82,9 @@ ${fontLink}
   .swatch{border-radius:${components.cardRadius};overflow:hidden;border:1px solid ${colors.textSecondary}15}
   .swatch-block{height:64px;display:flex;align-items:flex-end;padding:8px 10px}
   .swatch-block span{font-family:monospace;font-size:11px}
-  .swatch-info{padding:10px;background:${colors.surface}}
+  .swatch-info{padding:10px;background:${colors.surface};color:${surfaceText}}
   .swatch-info strong{font-size:13px;display:block;margin-bottom:2px}
-  .swatch-info small{font-size:11px;color:${colors.textSecondary}}
+  .swatch-info small{font-size:11px;color:${surfaceTextMuted}}
 
   /* Typography */
   .type-list{display:flex;flex-direction:column;gap:24px}
@@ -93,9 +99,9 @@ ${fontLink}
 
   /* Cards */
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
-  .card{background:${colors.surface};border-radius:${components.cardRadius};padding:24px}
+  .card{background:${colors.surface};border-radius:${components.cardRadius};padding:24px;color:${surfaceText}}
   .card h3{font-size:18px;font-weight:600;margin-bottom:8px}
-  .card p{font-size:14px;color:${colors.textSecondary};line-height:1.55}
+  .card p{font-size:14px;color:${surfaceTextMuted};line-height:1.55}
 
   @media(max-width:640px){
     header h1{font-size:32px}
@@ -166,7 +172,7 @@ ${allColors.map(c => `    <div class="swatch">
     <button style="background:${colors.primary};color:${onColor(colors.primary)}">Primary</button>
     <button style="background:${colors.secondary};color:${onColor(colors.secondary)}">Secondary</button>
     <button style="background:transparent;color:${colors.primary};border:2px solid ${colors.primary}">Outlined</button>
-    <button style="background:${colors.surface};color:${colors.textPrimary};border:${components.inputBorder}">Surface</button>
+    <button style="background:${colors.surface};color:${surfaceText};border:${components.inputBorder}">Surface</button>
     <button style="background:${colors.error};color:${onColor(colors.error)}">Destructive</button>
   </div>
 </section>
