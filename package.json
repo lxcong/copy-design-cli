@@ -1,6 +1,6 @@
 {
-  "name": "copy-design",
-  "version": "1.0.2",
+  "name": "copy-design-cli",
+  "version": "1.0.0",
   "description": "Extract design system from any webpage URL into DESIGN.md",
   "type": "module",
   "license": "MIT",
