@@ -1,5 +1,10 @@
 import type { DesignAnalysis } from "./types.js";
 
+function ensurePx(v: number | string): string {
+  const n = typeof v === "number" ? v : parseFloat(String(v)) || 0;
+  return `${n}px`;
+}
+
 export function buildDesignMd(
   analysis: DesignAnalysis,
   html: string,
@@ -41,7 +46,7 @@ ${analysis.theme}
 ## Spacing & Layout
 
 - **Base unit:** ${spacing.baseUnit}
-- **Scale:** ${spacing.values.map(v => `${v}px`).join(", ")}
+- **Scale:** ${spacing.values.map(v => ensurePx(v)).join(", ")}
 - **Max width:** ${layout.maxWidth}
 - **Grid:** ${layout.columns} columns
 - **Structure:** ${layout.description}

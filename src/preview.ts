@@ -1,5 +1,17 @@
 import type { DesignAnalysis } from "./types.js";
 
+// Parse a value that might be a number or a string like "8px" into a pure number
+function parseNumeric(v: number | string): number {
+  if (typeof v === "number") return v;
+  return parseFloat(String(v)) || 0;
+}
+
+// Ensure a value has "px" suffix exactly once
+function ensurePx(v: number | string): string {
+  const n = parseNumeric(v);
+  return `${n}px`;
+}
+
 export function buildPreviewHtml(
   analysis: DesignAnalysis,
   sourceUrl: string,
@@ -76,8 +88,9 @@ export function buildPreviewHtml(
   ];
 
   const spacingBoxes = spacing.values.map(v => {
-    const scale = Math.max(v / 1.5, 10);
-    return `      <div class="spacing-item"><div class="spacing-box" style="width: ${scale}px; height: ${scale}px;"></div><div class="spacing-label">${v}px</div></div>`;
+    const n = parseNumeric(v);
+    const scale = Math.max(n / 1.5, 10);
+    return `      <div class="spacing-item"><div class="spacing-box" style="width: ${scale}px; height: ${scale}px;"></div><div class="spacing-label">${n}px</div></div>`;
   }).join("\n");
 
   return `<!DOCTYPE html>
@@ -534,7 +547,7 @@ ${typeSamples.map(t => {
 <section class="section" id="spacing">
   <div class="section-title">06 / Spacing Scale</div>
   <h2 class="section-heading">Spacing System</h2>
-  <p style="color: var(--color-text-secondary); margin-bottom: 32px; font-family: var(--font-primary);">Base unit: ${spacing.baseUnit}. Scale: ${spacing.values.map(v => v + "px").join(", ")}.</p>
+  <p style="color: var(--color-text-secondary); margin-bottom: 32px; font-family: var(--font-primary);">Base unit: ${ensurePx(spacing.baseUnit)}. Scale: ${spacing.values.map(v => ensurePx(v)).join(", ")}.</p>
 
   <div class="spacing-row">
 ${spacingBoxes}
