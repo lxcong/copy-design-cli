@@ -1,0 +1,6 @@
+node_modules/
+dist/
+*.png
+DESIGN.md
+DESIGN-preview.html
+.env
