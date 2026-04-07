@@ -38,8 +38,30 @@ const responseSchema = {
       type: SchemaType.STRING,
       description: "4-6 practical guidelines as bullet points. Mix do's and don'ts. Format: '- Do use primary color only for the most important action per screen\\n- Don't mix rounded and sharp corners'. Focus on maintaining consistency.",
     },
+    preview: {
+      type: SchemaType.OBJECT,
+      description: "Structured values for rendering a visual preview. Extract exact CSS values.",
+      properties: {
+        fontFamily: { type: SchemaType.STRING, description: "CSS font-family value like 'Inter, sans-serif'" },
+        headingSizes: {
+          type: SchemaType.OBJECT,
+          properties: {
+            h1: { type: SchemaType.STRING, description: "H1 size like 48px" },
+            h2: { type: SchemaType.STRING, description: "H2 size like 32px" },
+            h3: { type: SchemaType.STRING, description: "H3 size like 24px" },
+          },
+          required: ["h1", "h2", "h3"],
+        },
+        headingWeight: { type: SchemaType.NUMBER, description: "Heading font weight like 700" },
+        bodySize: { type: SchemaType.STRING, description: "Body text size like 16px" },
+        buttonRadius: { type: SchemaType.STRING, description: "Button border-radius like 8px" },
+        cardRadius: { type: SchemaType.STRING, description: "Card border-radius like 12px" },
+        cardShadow: { type: SchemaType.STRING, description: "Card box-shadow CSS value, or 'none'" },
+      },
+      required: ["fontFamily", "headingSizes", "headingWeight", "bodySize", "buttonRadius", "cardRadius", "cardShadow"],
+    },
   },
-  required: ["overview", "colors", "typography", "elevation", "components", "dosAndDonts"],
+  required: ["overview", "colors", "typography", "elevation", "components", "dosAndDonts", "preview"],
 };
 
 const PROMPT = `You are an expert Design Systems Lead. Analyze this webpage screenshot and extract its design system following the Stitch DESIGN.md format.

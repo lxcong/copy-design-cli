@@ -6,6 +6,16 @@ export interface ColorToken {
   role: string;
 }
 
+export interface PreviewTokens {
+  fontFamily: string;
+  headingSizes: { h1: string; h2: string; h3: string };
+  headingWeight: number;
+  bodySize: string;
+  buttonRadius: string;
+  cardRadius: string;
+  cardShadow: string;
+}
+
 export interface DesignAnalysis {
   overview: string;
   colors: ColorToken[];
@@ -13,6 +23,7 @@ export interface DesignAnalysis {
   elevation: string;
   components: string;
   dosAndDonts: string;
+  preview: PreviewTokens;
 }
 
 export const VIEWPORTS: Record<DeviceType, { width: number; height: number }> = {
