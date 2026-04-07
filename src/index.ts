@@ -5,6 +5,7 @@ import { takeScreenshot } from "./screenshot.js";
 import { analyzeScreenshot } from "./analyze.js";
 import { generateWithStitch } from "./stitch.js";
 import { buildDesignMd } from "./output.js";
+import { buildPreviewHtml } from "./preview.js";
 import type { DeviceType } from "./types.js";
 
 program
@@ -50,10 +51,14 @@ program
       spinner3.succeed("Stitch generation complete");
 
       // Step 4: Output
-      const spinner4 = ora("Writing DESIGN.md...").start();
+      const spinner4 = ora("Writing DESIGN.md + preview.html...").start();
       const markdown = buildDesignMd(analysis, html, url);
+      const preview = buildPreviewHtml(analysis, url);
+      const previewPath = opts.output.replace(/\.md$/i, "-preview.html");
       await writeFile(opts.output, markdown, "utf-8");
+      await writeFile(previewPath, preview, "utf-8");
       spinner4.succeed(`DESIGN.md saved to ${opts.output}`);
+      console.log(`  Preview: ${previewPath}`);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       console.error(`\nError: ${message}`);
