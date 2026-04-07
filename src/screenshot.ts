@@ -12,7 +12,10 @@ export async function takeScreenshot(
   const viewport = VIEWPORTS[device];
   const outputPath = join(tmpdir(), `copy-design-${randomUUID()}.png`);
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   try {
     const page = await browser.newPage();
     await page.setViewport(viewport);
