@@ -41,11 +41,9 @@ const MOCK_ANALYSIS: DesignAnalysis = {
   designPrompt: "A light minimal corporate page",
 };
 
-const MOCK_HTML = "<html><body><h1>Hello</h1></body></html>";
-
 describe("buildDesignMd", () => {
-  it("includes all 9 sections plus source code", () => {
-    const md = buildDesignMd(MOCK_ANALYSIS, MOCK_HTML, "https://example.com");
+  it("includes all 9 sections", () => {
+    const md = buildDesignMd(MOCK_ANALYSIS, "https://example.com");
     expect(md).toContain("## Visual Theme & Atmosphere");
     expect(md).toContain("## Color Palette & Roles");
     expect(md).toContain("## Typography Rules");
@@ -55,30 +53,24 @@ describe("buildDesignMd", () => {
     expect(md).toContain("## Do's and Don'ts");
     expect(md).toContain("## Responsive Behavior");
     expect(md).toContain("## Agent Prompt Guide");
-    expect(md).toContain("## Source Code");
   });
 
   it("includes actual color values", () => {
-    const md = buildDesignMd(MOCK_ANALYSIS, MOCK_HTML, "https://example.com");
+    const md = buildDesignMd(MOCK_ANALYSIS, "https://example.com");
     expect(md).toContain("#1A73E8");
     expect(md).toContain("#34A853");
     expect(md).toContain("#FFFFFF");
   });
 
   it("includes typography details", () => {
-    const md = buildDesignMd(MOCK_ANALYSIS, MOCK_HTML, "https://example.com");
+    const md = buildDesignMd(MOCK_ANALYSIS, "https://example.com");
     expect(md).toContain("Inter, sans-serif");
     expect(md).toContain("32px");
     expect(md).toContain("700");
   });
 
-  it("includes HTML source code", () => {
-    const md = buildDesignMd(MOCK_ANALYSIS, MOCK_HTML, "https://example.com");
-    expect(md).toContain(MOCK_HTML);
-  });
-
   it("includes source URL", () => {
-    const md = buildDesignMd(MOCK_ANALYSIS, MOCK_HTML, "https://example.com");
+    const md = buildDesignMd(MOCK_ANALYSIS, "https://example.com");
     expect(md).toContain("https://example.com");
   });
 });

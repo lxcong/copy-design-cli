@@ -2,18 +2,17 @@
 
 Extract the design system from any webpage URL into a `DESIGN.md` + visual `preview.html`.
 
-Powered by **Gemini** (AI vision analysis) + **Google Stitch** (UI recreation & code export).
+Powered by **Gemini 2.5 Flash** vision analysis.
 
 ## How it works
 
 ```
-URL → Puppeteer screenshot → Gemini analyzes design → Stitch recreates UI → DESIGN.md + preview.html
+URL → Puppeteer screenshot → Gemini analyzes design → DESIGN.md + preview.html
 ```
 
 1. Takes a full-page screenshot of the target URL
 2. Gemini 2.5 Flash analyzes the screenshot and extracts design tokens (colors, typography, spacing, layout, components)
-3. Stitch SDK recreates the design as a production-ready UI screen
-4. Outputs a structured `DESIGN.md` (design tokens + HTML/CSS source code) and a visual `preview.html` (interactive design token catalog)
+3. Outputs a structured `DESIGN.md` and a visual `preview.html` (interactive design token catalog)
 
 ## Install
 
@@ -29,15 +28,11 @@ npx copy-design https://example.com
 
 ## Setup
 
-You need two API keys:
-
 ```bash
 export GEMINI_API_KEY="your-gemini-api-key"
-export STITCH_API_KEY="your-stitch-api-key"
 ```
 
-- **Gemini API key**: Get from [Google AI Studio](https://aistudio.google.com/apikey)
-- **Stitch API key**: Get from [Stitch settings](https://stitch.withgoogle.com) (profile → API key)
+Get your key from [Google AI Studio](https://aistudio.google.com/apikey).
 
 ## Usage
 
@@ -59,7 +54,7 @@ copy-design https://stripe.com -d TABLET
 
 | File | Content |
 |------|---------|
-| `DESIGN.md` | Design tokens (colors, typography, spacing, layout, components) + Stitch-generated HTML/CSS source code |
+| `DESIGN.md` | Design tokens: colors, typography, spacing, layout, components, agent prompt guide |
 | `DESIGN-preview.html` | Visual design token catalog — open in browser to see colors, type scale, buttons, cards |
 
 ## DESIGN.md format
@@ -75,13 +70,11 @@ Follows the [Stitch DESIGN.md](https://stitch.withgoogle.com/docs/design-md/over
 - Do's and Don'ts
 - Responsive Behavior
 - Agent Prompt Guide
-- Source Code (full HTML/CSS)
 
 ## Tech stack
 
 - [Puppeteer](https://pptr.dev/) — headless browser screenshots
 - [Gemini 2.5 Flash](https://ai.google.dev/) — vision-based design analysis with structured output
-- [Stitch SDK](https://github.com/google-labs-code/stitch-sdk) — UI screen generation & HTML export
 - [Commander](https://github.com/tj/commander.js) — CLI framework
 - [ora](https://github.com/sindresorhus/ora) — progress spinners
 

@@ -3,7 +3,6 @@ import ora from "ora";
 import { unlink, writeFile } from "node:fs/promises";
 import { takeScreenshot } from "./screenshot.js";
 import { analyzeScreenshot } from "./analyze.js";
-import { generateWithStitch } from "./stitch.js";
 import { buildDesignMd } from "./output.js";
 import { buildPreviewHtml } from "./preview.js";
 import type { DeviceType } from "./types.js";
@@ -26,11 +25,6 @@ program
       console.error("Missing GEMINI_API_KEY environment variable.");
       process.exit(1);
     }
-    const stitchKey = process.env.STITCH_API_KEY;
-    if (!stitchKey) {
-      console.error("Missing STITCH_API_KEY environment variable.");
-      process.exit(1);
-    }
 
     let screenshotPath: string | undefined;
 
@@ -45,19 +39,14 @@ program
       const analysis = await analyzeScreenshot(screenshotPath, geminiKey);
       spinner2.succeed("Design analysis complete");
 
-      // Step 3: Stitch
-      const spinner3 = ora("Generating with Stitch...").start();
-      const html = await generateWithStitch(analysis.designPrompt, device, stitchKey);
-      spinner3.succeed("Stitch generation complete");
-
-      // Step 4: Output
-      const spinner4 = ora("Writing DESIGN.md + preview.html...").start();
-      const markdown = buildDesignMd(analysis, html, url);
+      // Step 3: Output
+      const spinner3 = ora("Writing DESIGN.md + preview.html...").start();
+      const markdown = buildDesignMd(analysis, url);
       const preview = buildPreviewHtml(analysis, url);
       const previewPath = opts.output.replace(/\.md$/i, "-preview.html");
       await writeFile(opts.output, markdown, "utf-8");
       await writeFile(previewPath, preview, "utf-8");
-      spinner4.succeed(`DESIGN.md saved to ${opts.output}`);
+      spinner3.succeed(`DESIGN.md saved to ${opts.output}`);
       console.log(`  Preview: ${previewPath}`);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);

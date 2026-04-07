@@ -7,7 +7,6 @@ function ensurePx(v: number | string): string {
 
 export function buildDesignMd(
   analysis: DesignAnalysis,
-  html: string,
   sourceUrl: string,
 ): string {
   const { colors, typography, spacing, layout, components } = analysis;
@@ -88,13 +87,5 @@ ${analysis.theme}
 
 **Reusable prompt:**
 > ${analysis.designPrompt}
-
----
-
-## Source Code
-
-\`\`\`html
-${html}
-\`\`\`
 `;
 }
