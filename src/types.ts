@@ -1,42 +1,18 @@
 export type DeviceType = "DESKTOP" | "MOBILE" | "TABLET";
 
+export interface ColorToken {
+  name: string;
+  hex: string;
+  role: string;
+}
+
 export interface DesignAnalysis {
-  theme: string;
-  colors: {
-    primary: string;
-    secondary: string;
-    accent: string;
-    background: string;
-    surface: string;
-    textPrimary: string;
-    textSecondary: string;
-    error: string;
-    success: string;
-  };
-  typography: {
-    fontFamily: string;
-    h1: { size: string; weight: number };
-    h2: { size: string; weight: number };
-    h3: { size: string; weight: number };
-    body: { size: string; weight: number };
-    caption: { size: string; weight: number };
-  };
-  spacing: {
-    baseUnit: string;
-    values: number[];
-  };
-  layout: {
-    description: string;
-    maxWidth: string;
-    columns: number;
-  };
-  components: {
-    buttonRadius: string;
-    cardRadius: string;
-    cardShadow: string;
-    inputBorder: string;
-  };
-  designPrompt: string;
+  overview: string;
+  colors: ColorToken[];
+  typography: string;
+  elevation: string;
+  components: string;
+  dosAndDonts: string;
 }
 
 export const VIEWPORTS: Record<DeviceType, { width: number; height: number }> = {

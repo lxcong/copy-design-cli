@@ -2,75 +2,43 @@ import { describe, it, expect } from "vitest";
 import { buildDesignMd } from "../src/output.js";
 import type { DesignAnalysis } from "../src/types.js";
 
-const MOCK_ANALYSIS: DesignAnalysis = {
-  theme: "Light, minimal corporate design with clean lines and ample whitespace",
-  colors: {
-    primary: "#1A73E8",
-    secondary: "#34A853",
-    accent: "#FBBC04",
-    background: "#FFFFFF",
-    surface: "#F8F9FA",
-    textPrimary: "#202124",
-    textSecondary: "#5F6368",
-    error: "#EA4335",
-    success: "#34A853",
-  },
-  typography: {
-    fontFamily: "Inter, sans-serif",
-    h1: { size: "32px", weight: 700 },
-    h2: { size: "24px", weight: 600 },
-    h3: { size: "20px", weight: 600 },
-    body: { size: "16px", weight: 400 },
-    caption: { size: "12px", weight: 400 },
-  },
-  spacing: {
-    baseUnit: "8px",
-    values: [4, 8, 16, 24, 32, 48, 64],
-  },
-  layout: {
-    description: "Top navigation bar with centered content area and footer",
-    maxWidth: "1200px",
-    columns: 12,
-  },
-  components: {
-    buttonRadius: "8px",
-    cardRadius: "12px",
-    cardShadow: "0 1px 3px rgba(0,0,0,0.12)",
-    inputBorder: "1px solid #DADCE0",
-  },
-  designPrompt: "A light minimal corporate page",
+const MOCK: DesignAnalysis = {
+  overview: "A calm, professional interface with high contrast and generous touch targets.",
+  colors: [
+    { name: "Primary", hex: "#2665fd", role: "CTAs, active states, key interactive elements" },
+    { name: "Secondary", hex: "#6074b9", role: "Supporting actions, chips, toggle states" },
+    { name: "Neutral", hex: "#757681", role: "Backgrounds, surfaces, non-chromatic UI" },
+  ],
+  typography: "Headline Font: Inter. Body Font: Inter. Headlines use semi-bold weight. Body text uses regular weight at 14-16px.",
+  elevation: "This design uses no shadows. Depth is conveyed through border contrast and surface color variation.",
+  components: "- **Buttons**: Rounded (8px), primary uses brand blue fill, secondary uses outline\n- **Inputs**: 1px border, surface-variant background, 12px padding\n- **Cards**: No elevation, 1px outline border, 12px corner radius",
+  dosAndDonts: "- Do use primary color only for the most important action per screen\n- Don't mix rounded and sharp corners in the same view",
 };
 
 describe("buildDesignMd", () => {
-  it("includes all 9 sections", () => {
-    const md = buildDesignMd(MOCK_ANALYSIS, "https://example.com");
-    expect(md).toContain("## Visual Theme & Atmosphere");
-    expect(md).toContain("## Color Palette & Roles");
-    expect(md).toContain("## Typography Rules");
-    expect(md).toContain("## Spacing & Layout");
-    expect(md).toContain("## Component Styles");
-    expect(md).toContain("## Depth & Elevation");
+  it("includes all 6 sections", () => {
+    const md = buildDesignMd(MOCK, "https://example.com");
+    expect(md).toContain("## Overview");
+    expect(md).toContain("## Colors");
+    expect(md).toContain("## Typography");
+    expect(md).toContain("## Elevation");
+    expect(md).toContain("## Components");
     expect(md).toContain("## Do's and Don'ts");
-    expect(md).toContain("## Responsive Behavior");
-    expect(md).toContain("## Agent Prompt Guide");
   });
 
-  it("includes actual color values", () => {
-    const md = buildDesignMd(MOCK_ANALYSIS, "https://example.com");
-    expect(md).toContain("#1A73E8");
-    expect(md).toContain("#34A853");
-    expect(md).toContain("#FFFFFF");
+  it("formats colors as name + hex + role", () => {
+    const md = buildDesignMd(MOCK, "https://example.com");
+    expect(md).toContain("**Primary** (#2665fd): CTAs, active states");
+    expect(md).toContain("**Secondary** (#6074b9)");
   });
 
-  it("includes typography details", () => {
-    const md = buildDesignMd(MOCK_ANALYSIS, "https://example.com");
-    expect(md).toContain("Inter, sans-serif");
-    expect(md).toContain("32px");
-    expect(md).toContain("700");
+  it("includes overview text", () => {
+    const md = buildDesignMd(MOCK, "https://example.com");
+    expect(md).toContain("calm, professional interface");
   });
 
-  it("includes source URL", () => {
-    const md = buildDesignMd(MOCK_ANALYSIS, "https://example.com");
-    expect(md).toContain("https://example.com");
+  it("does not include source URL in body", () => {
+    const md = buildDesignMd(MOCK, "https://example.com");
+    expect(md).not.toContain("https://example.com");
   });
 });
