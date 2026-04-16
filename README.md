@@ -2,7 +2,7 @@
 
 Extract the design system from any webpage URL into a `DESIGN.md` + visual `preview.html`.
 
-Powered by **Gemini 2.5 Flash** vision analysis.
+Powered by vision analysis — supports **Gemini 2.5 Flash** (default) and **Claude** (Opus 4.7, Sonnet 4.6, and others).
 
 ## How it works
 
@@ -28,11 +28,18 @@ npx copy-design https://example.com
 
 ## Setup
 
+Set at least one API key. The tool picks a provider based on which key is present, or you can force one with `--model` / `--provider`.
+
 ```bash
+# Gemini (default when both are set)
 export GEMINI_API_KEY="your-gemini-api-key"
+
+# Anthropic Claude
+export ANTHROPIC_API_KEY="your-anthropic-api-key"
 ```
 
-Get your key from [Google AI Studio](https://aistudio.google.com/apikey).
+- Gemini key: [Google AI Studio](https://aistudio.google.com/apikey)
+- Anthropic key: [Anthropic Console](https://console.anthropic.com/)
 
 ## Usage
 
@@ -48,6 +55,15 @@ copy-design https://stripe.com -d MOBILE
 
 # Tablet viewport
 copy-design https://stripe.com -d TABLET
+
+# Use Claude (provider inferred from model prefix)
+copy-design https://stripe.com --model claude-opus-4-7
+
+# Compare a specific Claude model
+copy-design https://stripe.com --model claude-sonnet-4-6 -o ./stripe-claude.md
+
+# Force a provider (uses its default model)
+copy-design https://stripe.com --provider anthropic
 ```
 
 ### Output files
@@ -75,6 +91,7 @@ Follows the [Stitch DESIGN.md](https://stitch.withgoogle.com/docs/design-md/over
 
 - [Puppeteer](https://pptr.dev/) — headless browser screenshots
 - [Gemini 2.5 Flash](https://ai.google.dev/) — vision-based design analysis with structured output
+- [Claude 4.x](https://docs.claude.com/) — Anthropic's vision models (Opus 4.7 default), structured output via tool use
 - [Commander](https://github.com/tj/commander.js) — CLI framework
 - [ora](https://github.com/sindresorhus/ora) — progress spinners
 
