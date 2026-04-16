@@ -1,6 +1,8 @@
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { readFile } from "node:fs/promises";
-import type { DesignAnalysis } from "./types.js";
+import type { DesignAnalysis } from "../types.js";
+import type { DesignAnalyzer } from "./types.js";
+import { PROMPT } from "./prompt.js";
 
 const responseSchema = {
   type: SchemaType.OBJECT,
@@ -64,36 +66,29 @@ const responseSchema = {
   required: ["overview", "colors", "typography", "elevation", "components", "dosAndDonts", "preview"],
 };
 
-const PROMPT = `You are an expert Design Systems Lead. Analyze this webpage screenshot and extract its design system following the Stitch DESIGN.md format.
+export function createGeminiAnalyzer(apiKey: string, model: string): DesignAnalyzer {
+  return {
+    provider: "google",
+    model,
+    async analyze(screenshotPath: string): Promise<DesignAnalysis> {
+      const genAI = new GoogleGenerativeAI(apiKey);
+      const client = genAI.getGenerativeModel({
+        model,
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema,
+        } as Parameters<typeof genAI.getGenerativeModel>[0]["generationConfig"],
+      });
 
-Rules:
-- All hex colors MUST be 6-digit: #RRGGBB
-- Colors use role names (Primary, Secondary, Tertiary, Neutral) with hex and functional description
-- Typography: list font families, then describe weight/size usage in natural language
-- Elevation: describe the shadow approach (flat, soft shadows, heavy shadows, or border-based depth)
-- Components: describe Buttons, Inputs, Cards style with exact values in parentheses
-- Do's and Don'ts: practical guardrails for maintaining the design's consistency`;
+      const imageBuffer = await readFile(screenshotPath);
+      const base64Image = imageBuffer.toString("base64");
 
-export async function analyzeScreenshot(
-  screenshotPath: string,
-  apiKey: string,
-): Promise<DesignAnalysis> {
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
-    generationConfig: {
-      responseMimeType: "application/json",
-      responseSchema,
-    } as Parameters<typeof genAI.getGenerativeModel>[0]["generationConfig"],
-  });
+      const result = await client.generateContent([
+        PROMPT,
+        { inlineData: { mimeType: "image/png", data: base64Image } },
+      ]);
 
-  const imageBuffer = await readFile(screenshotPath);
-  const base64Image = imageBuffer.toString("base64");
-
-  const result = await model.generateContent([
-    PROMPT,
-    { inlineData: { mimeType: "image/png", data: base64Image } },
-  ]);
-
-  return JSON.parse(result.response.text().trim()) as DesignAnalysis;
+      return JSON.parse(result.response.text().trim()) as DesignAnalysis;
+    },
+  };
 }

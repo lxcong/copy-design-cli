@@ -4,6 +4,7 @@ import type {
   ResolveOptions,
 } from "./types.js";
 import { DEFAULT_MODELS } from "./types.js";
+import { createGeminiAnalyzer } from "./gemini.js";
 
 const MODEL_PREFIXES: Record<string, ProviderName> = {
   "claude-": "anthropic",
@@ -76,11 +77,5 @@ export function resolveProvider(opts: ResolveOptions): DesignAnalyzer {
     };
   }
 
-  return {
-    provider: "google",
-    model: chosenModel,
-    analyze: async () => {
-      throw new Error("google analyzer not implemented yet");
-    },
-  };
+  return createGeminiAnalyzer(apiKey, chosenModel);
 }
