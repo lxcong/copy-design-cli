@@ -7,11 +7,11 @@ Powered by vision analysis — supports **Gemini 2.5 Flash** (default) and **Cla
 ## How it works
 
 ```
-URL → Puppeteer screenshot → Gemini analyzes design → DESIGN.md + preview.html
+URL → Puppeteer screenshot → Vision model analyzes design → DESIGN.md + preview.html
 ```
 
 1. Takes a full-page screenshot of the target URL
-2. Gemini 2.5 Flash analyzes the screenshot and extracts design tokens (colors, typography, spacing, layout, components)
+2. The selected vision model (Gemini or Claude) analyzes the screenshot and extracts design tokens (colors, typography, spacing, layout, components)
 3. Outputs a structured `DESIGN.md` and a visual `preview.html` (interactive design token catalog)
 
 ## Install
