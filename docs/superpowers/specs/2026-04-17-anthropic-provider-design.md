@@ -29,7 +29,7 @@ copy-design https://stripe.com --provider anthropic
 
 Flags:
 - `--model <name>` — optional. Overrides provider default. Prefix determines provider when `--provider` is absent.
-- `--provider <gemini|anthropic>` — optional. Explicit provider selection.
+- `--provider <google|anthropic>` — optional. Explicit provider selection.
 
 ## Provider resolution
 
