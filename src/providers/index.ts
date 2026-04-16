@@ -5,6 +5,7 @@ import type {
 } from "./types.js";
 import { DEFAULT_MODELS } from "./types.js";
 import { createGeminiAnalyzer } from "./gemini.js";
+import { createAnthropicAnalyzer } from "./anthropic.js";
 
 const MODEL_PREFIXES: Record<string, ProviderName> = {
   "claude-": "anthropic",
@@ -67,14 +68,7 @@ export function resolveProvider(opts: ResolveOptions): DesignAnalyzer {
   }
 
   if (chosenProvider === "anthropic") {
-    // Real impl lands in Task 6; stub keeps resolution tests runnable.
-    return {
-      provider: "anthropic",
-      model: chosenModel,
-      analyze: async () => {
-        throw new Error("anthropic analyzer not implemented yet");
-      },
-    };
+    return createAnthropicAnalyzer(apiKey, chosenModel);
   }
 
   return createGeminiAnalyzer(apiKey, chosenModel);
